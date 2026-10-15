@@ -1,0 +1,4427 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    McArthur's Trinidad Doubles - Order System
+</title>
+
+
+<!-- =====================================================
+     PDF.JS
+     ===================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+
+<style>
+
+
+/* =====================================================
+   GENERAL
+   ===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    background: #eeeeee;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: #111;
+
+}
+
+
+/* =====================================================
+   MAIN INTERFACE
+   ===================================================== */
+
+.app {
+
+    width: 430px;
+
+    max-width:
+        calc(100% - 30px);
+
+    margin:
+        35px auto;
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 20px
+        rgba(0,0,0,0.15);
+
+}
+
+
+h1 {
+
+    text-align: center;
+
+    margin: 0;
+
+    font-size: 24px;
+
+}
+
+
+.subtitle {
+
+    text-align: center;
+
+    color: #666;
+
+    margin:
+        5px 0 25px;
+
+}
+
+
+.section-title {
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    text-transform: uppercase;
+
+    border-bottom:
+        1px solid #ddd;
+
+    padding-bottom: 7px;
+
+    margin-top: 20px;
+
+    margin-bottom: 12px;
+
+}
+
+
+label {
+
+    display: block;
+
+    font-weight: bold;
+
+    font-size: 13px;
+
+    margin-bottom: 5px;
+
+}
+
+
+input {
+
+    width: 100%;
+
+    height: 42px;
+
+    border:
+        1px solid #bbb;
+
+    border-radius: 6px;
+
+    padding:
+        8px 10px;
+
+    font-size: 16px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.quantity-row {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 100px;
+
+    align-items: center;
+
+    margin-bottom: 10px;
+
+}
+
+
+.quantity-row label {
+
+    margin: 0;
+
+    font-size: 14px;
+
+}
+
+
+.menu-price {
+
+    color: #666;
+
+    font-weight: normal;
+
+    font-size: 12px;
+
+    margin-left: 5px;
+
+}
+
+
+button {
+
+    width: 100%;
+
+    border: none;
+
+    border-radius: 7px;
+
+    padding: 14px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    margin-top: 10px;
+
+}
+
+
+.generate {
+
+    background: #111;
+
+    color: white;
+
+}
+
+
+.reset {
+
+    background: #ddd;
+
+    color: #111;
+
+}
+
+
+/* =====================================================
+   CUSTOMER RECEIPT UPLOAD
+   ===================================================== */
+
+.receipt-import {
+
+    margin-top: 25px;
+
+    padding-top: 5px;
+
+}
+
+
+.receipt-import input[type="file"] {
+
+    height: auto;
+
+    padding: 10px;
+
+    background: #fafafa;
+
+    font-size: 13px;
+
+}
+
+
+.receipt-status {
+
+    font-size: 13px;
+
+    color: #666;
+
+    margin:
+        4px 0 8px;
+
+    min-height: 18px;
+
+}
+
+
+.receipt-button {
+
+    background: #444;
+
+    color: white;
+
+}
+
+
+.receipt-button:disabled {
+
+    background: #aaa;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =====================================================
+   KITCHEN TICKET
+   ===================================================== */
+
+.ticket-area {
+
+    display: none;
+
+    margin-top: 30px;
+
+    text-align: center;
+
+}
+
+
+.ticket {
+
+    width: 80mm;
+
+    min-height: 160mm;
+
+    margin: 0 auto;
+
+    background: white;
+
+    color: black;
+
+    padding:
+        7mm 5mm;
+
+    text-align: left;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 12px;
+
+}
+
+
+.ticket-header {
+
+    text-align: center;
+
+    font-weight: bold;
+
+}
+
+
+.ticket-business {
+
+    font-size: 18px;
+
+    line-height: 1.1;
+
+}
+
+
+.ticket-subtitle {
+
+    font-size: 13px;
+
+    margin-top: 3px;
+
+}
+
+
+.ticket-order {
+
+    margin-top: 14px;
+
+    line-height: 1.5;
+
+}
+
+
+.ticket-section-title {
+
+    font-weight: bold;
+
+    font-size: 13px;
+
+    margin-bottom: 8px;
+
+    text-transform: uppercase;
+
+}
+
+
+.ticket-items {
+
+    margin-top: 8px;
+
+}
+
+
+/* =====================================================
+   INDIVIDUAL FOOD ROW
+   ===================================================== */
+
+.ticket-item {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    width: 100%;
+
+    padding:
+        8px 0;
+
+    font-size: 12px;
+
+    border-bottom:
+        1px dashed #000;
+
+}
+
+
+.ticket-item:last-child {
+
+    border-bottom: none;
+
+}
+
+
+.ticket-item-name {
+
+    flex: 1;
+
+    padding-right: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.ticket-item-quantity {
+
+    min-width: 28px;
+
+    text-align: right;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+}
+
+
+/* =====================================================
+   SEPARATOR
+   ===================================================== */
+
+.separator {
+
+    border-top:
+        1px dashed #000;
+
+    margin:
+        15px 0;
+
+}
+
+
+/* =====================================================
+   PACKAGING
+   ===================================================== */
+
+.packaging-box {
+
+    border:
+        1px dashed #000;
+
+    padding:
+        9px 9px 6px 9px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.packaging-box-title {
+
+    font-weight: bold;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 9px;
+
+}
+
+
+.packaging-row {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    gap: 10px;
+
+    margin-bottom: 7px;
+
+    font-size: 12px;
+
+}
+
+
+.packaging-row span:first-child {
+
+    flex: 1;
+
+}
+
+
+.packaging-row strong {
+
+    text-align: right;
+
+    min-width: 25px;
+
+    font-size: 13px;
+
+}
+
+
+/* =====================================================
+   KITCHEN PRINT BUTTON
+   ===================================================== */
+
+.print-button {
+
+    background: #333;
+
+    color: white;
+
+    width: 80mm;
+
+    margin:
+        15px auto;
+
+    display: block;
+
+}
+
+
+/* =====================================================
+   CUSTOMER RECEIPT
+   ===================================================== */
+
+.customer-receipt-area {
+
+    display: none;
+
+    margin-top: 30px;
+
+    text-align: center;
+
+}
+
+
+.customer-receipt {
+
+    width: 80mm;
+
+    margin: 0 auto;
+
+    background: white;
+
+    color: #000;
+
+    padding:
+        7mm 5mm;
+
+    text-align: left;
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    font-size: 12px;
+
+}
+
+
+/* =====================================================
+   RECEIPT HEADER
+   ===================================================== */
+
+.receipt-header {
+
+    text-align: center;
+
+}
+
+
+.receipt-business {
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    font-size: 20px;
+
+    font-weight: 900;
+
+    line-height: 1.05;
+
+    letter-spacing: 1px;
+
+}
+
+
+.receipt-address {
+
+    margin-top: 9px;
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+}
+
+
+/* =====================================================
+   CUSTOMER + ORDER NUMBER
+   ===================================================== */
+
+.receipt-customer {
+
+    text-align: center;
+
+    margin-top: 16px;
+
+}
+
+
+.receipt-customer-label {
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 7px;
+
+}
+
+
+/* =====================================================
+   BLACK ORDER NUMBER BOX
+   ===================================================== */
+
+.receipt-order-box {
+
+    width: 100%;
+
+    background: #000;
+
+    color: #fff;
+
+    text-align: center;
+
+    padding:
+        9px 6px 10px;
+
+    margin:
+        0 auto;
+
+}
+
+
+.receipt-order-label {
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    color: #fff;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+}
+
+
+.receipt-order-number {
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    color: #fff;
+
+    font-size: 35px;
+
+    font-weight: 900;
+
+    line-height: 1;
+
+    margin-top: 5px;
+
+    letter-spacing: 2px;
+
+    word-break: break-word;
+
+}
+
+
+/* =====================================================
+   CUSTOMER NAME UNDER ORDER NUMBER
+   ===================================================== */
+
+.receipt-customer-name {
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    font-size: 17px;
+
+    font-weight: 900;
+
+    margin-top: 9px;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    word-break: break-word;
+
+}
+
+
+/* =====================================================
+   RECEIPT INFORMATION
+   ===================================================== */
+
+.receipt-information {
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    line-height: 1.6;
+
+}
+
+
+.receipt-line {
+
+    border-top:
+        1px dashed #000;
+
+    margin:
+        12px 0;
+
+}
+
+
+/* =====================================================
+   RECEIPT ITEMS
+   ===================================================== */
+
+.receipt-items {
+
+    width: 100%;
+
+}
+
+
+.receipt-item {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    gap: 10px;
+
+    padding:
+        5px 0;
+
+    line-height: 1.3;
+
+}
+
+
+.receipt-item-name {
+
+    flex: 1;
+
+    word-break: break-word;
+
+}
+
+
+.receipt-item-amount {
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+}
+
+
+/* =====================================================
+   TOTALS
+   ===================================================== */
+
+.receipt-total-row {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    padding:
+        4px 0;
+
+}
+
+
+.receipt-total-row strong {
+
+    font-size: 14px;
+
+}
+
+
+.receipt-total-row:last-child {
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+}
+
+
+/* =====================================================
+   PAYMENT
+   ===================================================== */
+
+.receipt-payment {
+
+    margin-top: 15px;
+
+    text-align: center;
+
+}
+
+
+.receipt-payment-title {
+
+    font-weight: 900;
+
+    margin-bottom: 7px;
+
+    letter-spacing: 1px;
+
+}
+
+
+.receipt-payment-main {
+
+    font-weight: bold;
+
+    font-size: 14px;
+
+}
+
+
+.receipt-payment-wallet {
+
+    display: none;
+
+}
+
+
+.receipt-customer-present {
+
+    margin-top: 6px;
+
+    font-size: 11px;
+
+}
+
+
+/* =====================================================
+   VAT
+   ===================================================== */
+
+.receipt-vat {
+
+    margin-top: 15px;
+
+}
+
+
+.receipt-vat-title {
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+
+}
+
+
+.receipt-vat-row {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    padding:
+        2px 0;
+
+}
+
+
+/* =====================================================
+   THANK YOU
+   ===================================================== */
+
+.receipt-thank-you {
+
+    text-align: center;
+
+    font-weight: bold;
+
+    margin-top: 18px;
+
+}
+
+
+/* =====================================================
+   RECEIPT PRINT BUTTON
+   ===================================================== */
+
+.print-receipt-button {
+
+    width: 80mm;
+
+    background: #111;
+
+    color: white;
+
+    margin:
+        15px auto;
+
+    display: block;
+
+}
+
+
+/* =====================================================
+   PRINT SETTINGS
+   ===================================================== */
+
+@media print {
+
+
+    @page {
+
+        size: 80mm auto;
+
+        margin: 0;
+
+    }
+
+
+    html,
+    body {
+
+        width: 80mm;
+
+        margin: 0;
+
+        padding: 0;
+
+        background: white;
+
+    }
+
+
+    body * {
+
+        visibility: hidden;
+
+    }
+
+
+    /* =================================================
+       KITCHEN TICKET PRINT
+       ================================================= */
+
+    .ticket-area.printing-ticket,
+    .ticket-area.printing-ticket * {
+
+        visibility: visible;
+
+    }
+
+
+    .ticket-area.printing-ticket {
+
+        display: block !important;
+
+        position: absolute;
+
+        left: 0;
+
+        top: 0;
+
+        margin: 0;
+
+        padding: 0;
+
+    }
+
+
+    .ticket-area.printing-ticket .ticket {
+
+        width: 80mm;
+
+        min-height: 160mm;
+
+        margin: 0;
+
+        padding:
+            7mm 5mm;
+
+        box-shadow: none;
+
+    }
+
+
+    /* =================================================
+       CUSTOMER RECEIPT PRINT
+       ================================================= */
+
+    .customer-receipt-area.printing-receipt,
+    .customer-receipt-area.printing-receipt * {
+
+        visibility: visible;
+
+    }
+
+
+    .customer-receipt-area.printing-receipt {
+
+        display: block !important;
+
+        position: absolute;
+
+        left: 0;
+
+        top: 0;
+
+        margin: 0;
+
+        padding: 0;
+
+    }
+
+
+    .customer-receipt-area.printing-receipt
+    .customer-receipt {
+
+        width: 80mm;
+
+        margin: 0;
+
+        padding:
+            7mm 5mm;
+
+        box-shadow: none;
+
+        /*
+         * Force the browser to preserve
+         * receipt colours when printing.
+         */
+
+        -webkit-print-color-adjust: exact !important;
+
+        print-color-adjust: exact !important;
+
+    }
+
+
+    /* =================================================
+       FORCE BLACK ORDER BOX TO PRINT BLACK
+       ================================================= */
+
+    .customer-receipt-area.printing-receipt
+    .receipt-order-box {
+
+        background: #000 !important;
+
+        color: #fff !important;
+
+        -webkit-print-color-adjust: exact !important;
+
+        print-color-adjust: exact !important;
+
+    }
+
+
+    .customer-receipt-area.printing-receipt
+    .receipt-order-box * {
+
+        background: #000 !important;
+
+        color: #fff !important;
+
+        -webkit-print-color-adjust: exact !important;
+
+        print-color-adjust: exact !important;
+
+    }
+
+
+    /* =================================================
+       FORCE RECEIPT ELEMENT COLOURS
+       ================================================= */
+
+    .customer-receipt-area.printing-receipt
+    .receipt-business,
+    .customer-receipt-area.printing-receipt
+    .receipt-address,
+    .customer-receipt-area.printing-receipt
+    .receipt-customer,
+    .customer-receipt-area.printing-receipt
+    .receipt-information,
+    .customer-receipt-area.printing-receipt
+    .receipt-items,
+    .customer-receipt-area.printing-receipt
+    .receipt-total-row,
+    .customer-receipt-area.printing-receipt
+    .receipt-payment,
+    .customer-receipt-area.printing-receipt
+    .receipt-vat,
+    .customer-receipt-area.printing-receipt
+    .receipt-thank-you {
+
+        -webkit-print-color-adjust: exact !important;
+
+        print-color-adjust: exact !important;
+
+    }
+
+
+    .print-button,
+    .print-receipt-button {
+
+        display: none !important;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     ORDER ENTRY
+     ===================================================== -->
+
+<div class="app">
+
+
+    <h1>
+        McArthur's Trinidad Doubles
+    </h1>
+
+
+    <div class="subtitle">
+        Order System
+    </div>
+
+
+    <!-- ORDER DETAILS -->
+
+    <div class="section-title">
+        Order Details
+    </div>
+
+
+    <label>
+        Customer
+    </label>
+
+
+    <input
+        id="customer"
+        type="text"
+        placeholder="Customer name"
+    >
+
+
+    <label>
+        Order Number
+    </label>
+
+
+    <input
+        id="orderNumber"
+        type="text"
+        placeholder="001"
+    >
+
+
+    <label>
+        Collection / Delivery Time
+    </label>
+
+
+    <input
+        id="collectionTime"
+        type="time"
+    >
+
+
+    <!-- =================================================
+         MENU
+         ================================================= -->
+
+    <div class="section-title">
+        Menu
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            1 Roti
+
+            <span class="menu-price">
+                £1.00
+            </span>
+
+        </label>
+
+
+        <input
+            id="roti1"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Curries (with Rice/Roti/Fry Bake)
+
+            <span class="menu-price">
+                £9.50
+            </span>
+
+        </label>
+
+
+        <input
+            id="curries"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="section-title">
+        Doubles
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Doubles 1 PC
+
+            <span class="menu-price">
+                £2.50
+            </span>
+
+        </label>
+
+
+        <input
+            id="doubles1"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Doubles 2 PC
+
+            <span class="menu-price">
+                £4.80
+            </span>
+
+        </label>
+
+
+        <input
+            id="doubles2"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Doubles 3 PC
+
+            <span class="menu-price">
+                £6.30
+            </span>
+
+        </label>
+
+
+        <input
+            id="doubles3"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Doubles 4 PC
+
+            <span class="menu-price">
+                £8.20
+            </span>
+
+        </label>
+
+
+        <input
+            id="doubles4"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Doubles 5 PC
+
+            <span class="menu-price">
+                £10.00
+            </span>
+
+        </label>
+
+
+        <input
+            id="doubles5"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Doubles 6 PC
+
+            <span class="menu-price">
+                Price TBC
+            </span>
+
+        </label>
+
+
+        <input
+            id="doubles6"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <!-- =================================================
+         OTHER FOOD
+         ================================================= -->
+
+    <div class="section-title">
+        Other Food
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Fry Bake 4 PC
+
+            <span class="menu-price">
+                £2.00
+            </span>
+
+        </label>
+
+
+        <input
+            id="fryBake"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Pholourie 5 PC
+
+            <span class="menu-price">
+                £1.50
+            </span>
+
+        </label>
+
+
+        <input
+            id="pholourie"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Pot of Dal
+
+            <span class="menu-price">
+                £5.00
+            </span>
+
+        </label>
+
+
+        <input
+            id="potDal"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Roti Chicken
+
+            <span class="menu-price">
+                £5.00
+            </span>
+
+        </label>
+
+
+        <input
+            id="rotiChicken"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Roti Lamb/Beef
+
+            <span class="menu-price">
+                £6.00
+            </span>
+
+        </label>
+
+
+        <input
+            id="rotiLambBeef"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Roti Goat
+
+            <span class="menu-price">
+                £6.00
+            </span>
+
+        </label>
+
+
+        <input
+            id="rotiGoat"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Roti Potato
+
+            <span class="menu-price">
+                £5.00
+            </span>
+
+        </label>
+
+
+        <input
+            id="rotiPotato"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Special Dal Curry Goat & White Rice
+
+            <span class="menu-price">
+                £10.50
+            </span>
+
+        </label>
+
+
+        <input
+            id="specialDalGoat"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <div class="quantity-row">
+
+        <label>
+
+            Vegetable Curry (with Rice/Roti/Fry Bake)
+
+            <span class="menu-price">
+                £6.00
+            </span>
+
+        </label>
+
+
+        <input
+            id="vegetableCurry"
+            type="number"
+            min="0"
+            value="0"
+        >
+
+    </div>
+
+
+    <!-- =================================================
+         GENERATE KITCHEN TICKET
+         ================================================= -->
+
+    <button
+        class="generate"
+        onclick="generateTicket()"
+    >
+
+        GENERATE KITCHEN TICKET
+
+    </button>
+
+
+    <!-- =================================================
+         CUSTOMER RECEIPT
+         ================================================= -->
+
+    <div class="receipt-import">
+
+
+        <div class="section-title">
+            Customer Receipt
+        </div>
+
+
+        <label>
+            Upload Payment Receipt PDF
+        </label>
+
+
+        <input
+            type="file"
+            id="receiptPdf"
+            accept="application/pdf"
+            onchange="receiptFileSelected()"
+        >
+
+
+        <div
+            id="receiptStatus"
+            class="receipt-status"
+        >
+            No receipt PDF uploaded.
+        </div>
+
+
+        <button
+            class="receipt-button"
+            id="loadReceiptButton"
+            onclick="loadReceiptPDF()"
+            disabled
+        >
+
+            📄 LOAD CUSTOMER RECEIPT
+
+        </button>
+
+
+    </div>
+
+
+    <!-- =================================================
+         RESET
+         ================================================= -->
+
+    <button
+        class="reset"
+        onclick="resetOrder()"
+    >
+
+        NEW ORDER / RESET
+
+    </button>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     PRINTABLE KITCHEN TICKET
+     ===================================================== -->
+
+<div
+    class="ticket-area"
+    id="ticketArea"
+>
+
+
+    <div
+        class="ticket"
+        id="ticket"
+    >
+
+
+        <!-- HEADER -->
+
+        <div class="ticket-header">
+
+            <div class="ticket-business">
+                McARTHUR'S
+            </div>
+
+            <div class="ticket-business">
+                TRINIDAD DOUBLES
+            </div>
+
+            <div class="ticket-subtitle">
+                KITCHEN ORDER
+            </div>
+
+        </div>
+
+
+        <!-- ORDER DETAILS -->
+
+        <div class="ticket-order">
+
+            <strong>
+
+                ORDER #
+
+                <span id="ticketOrder"></span>
+
+            </strong>
+
+
+            <br>
+
+
+            <span id="ticketCustomer"></span>
+
+
+            <br>
+
+
+            COLLECTION:
+
+            <span id="ticketTime"></span>
+
+        </div>
+
+
+        <!-- FOOD ORDER -->
+
+        <div class="separator"></div>
+
+
+        <div class="ticket-section-title">
+            ORDER
+        </div>
+
+
+        <div
+            class="ticket-items"
+            id="foodItems"
+        >
+
+
+            <div
+                class="ticket-item"
+                id="ticketRoti1Row"
+            >
+
+                <span class="ticket-item-name">
+                    1 ROTI
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketRoti1"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketCurriesRow"
+            >
+
+                <span class="ticket-item-name">
+                    CURRIES
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketCurries"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketDoubles1Row"
+            >
+
+                <span class="ticket-item-name">
+                    DOUBLES 1 PC
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketDoubles1"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketDoubles2Row"
+            >
+
+                <span class="ticket-item-name">
+                    DOUBLES 2 PC
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketDoubles2"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketDoubles3Row"
+            >
+
+                <span class="ticket-item-name">
+                    DOUBLES 3 PC
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketDoubles3"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketDoubles4Row"
+            >
+
+                <span class="ticket-item-name">
+                    DOUBLES 4 PC
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketDoubles4"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketDoubles5Row"
+            >
+
+                <span class="ticket-item-name">
+                    DOUBLES 5 PC
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketDoubles5"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketDoubles6Row"
+            >
+
+                <span class="ticket-item-name">
+                    DOUBLES 6 PC
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketDoubles6"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketFryBakeRow"
+            >
+
+                <span class="ticket-item-name">
+                    FRY BAKE 4 PC
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketFryBake"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketPholourieRow"
+            >
+
+                <span class="ticket-item-name">
+                    PHOLOURIE 5 PC
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketPholourie"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketPotDalRow"
+            >
+
+                <span class="ticket-item-name">
+                    POT OF DAL
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketPotDal"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketRotiChickenRow"
+            >
+
+                <span class="ticket-item-name">
+                    ROTI CHICKEN
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketRotiChicken"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketRotiLambBeefRow"
+            >
+
+                <span class="ticket-item-name">
+                    ROTI LAMB/BEEF
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketRotiLambBeef"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketRotiGoatRow"
+            >
+
+                <span class="ticket-item-name">
+                    ROTI GOAT
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketRotiGoat"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketRotiPotatoRow"
+            >
+
+                <span class="ticket-item-name">
+                    ROTI POTATO
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketRotiPotato"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketSpecialDalGoatRow"
+            >
+
+                <span class="ticket-item-name">
+                    SPECIAL DAL CURRY GOAT & RICE
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketSpecialDalGoat"
+                ></span>
+
+            </div>
+
+
+            <div
+                class="ticket-item"
+                id="ticketVegetableCurryRow"
+            >
+
+                <span class="ticket-item-name">
+                    VEGETABLE CURRY
+                </span>
+
+                <span
+                    class="ticket-item-quantity"
+                    id="ticketVegetableCurry"
+                ></span>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- PACKAGING -->
+
+        <div
+            class="separator"
+            id="packagingSeparator"
+        ></div>
+
+
+        <div
+            class="ticket-section-title"
+            id="packagingTitle"
+        >
+            PACKAGING
+        </div>
+
+
+        <!-- DOUBLES -->
+
+        <div
+            class="packaging-box"
+            id="doublesPackagingBox"
+        >
+
+
+            <div class="packaging-box-title">
+                DOUBLES
+            </div>
+
+
+            <div class="packaging-row">
+
+                <span>
+                    Doubles bags required
+                </span>
+
+                <strong id="bagsRequired"></strong>
+
+            </div>
+
+
+            <div
+                class="packaging-row"
+                id="sticker1Row"
+            >
+
+                <span>
+                    X1 DOUBLES stickers
+                </span>
+
+                <strong id="sticker1"></strong>
+
+            </div>
+
+
+            <div
+                class="packaging-row"
+                id="sticker2Row"
+            >
+
+                <span>
+                    X2 DOUBLES stickers
+                </span>
+
+                <strong id="sticker2"></strong>
+
+            </div>
+
+
+            <div
+                class="packaging-row"
+                id="sticker3Row"
+            >
+
+                <span>
+                    X3 DOUBLES stickers
+                </span>
+
+                <strong id="sticker3"></strong>
+
+            </div>
+
+
+            <div
+                class="packaging-row"
+                id="bagLogoRow"
+            >
+
+                <span>
+                    Doubles-bag logo stickers
+                </span>
+
+                <strong id="bagLogo"></strong>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- PHOLOURIE PACKAGING -->
+
+        <div class="packaging-box" id="pholouriePackagingBox">
+
+            <div class="packaging-box-title">PHOLOURIE BAGS</div>
+
+            <div class="packaging-row">
+                <span>Pholourie pieces (5 per menu portion)</span>
+                <strong id="pholouriePieces"></strong>
+            </div>
+
+            <div class="packaging-row">
+                <span>Pholourie bags required (max 10 pieces each)</span>
+                <strong id="pholourieBags"></strong>
+            </div>
+
+            <div class="packaging-row" id="pholourieSticker5Row">
+                <span>X5 PHOLOURIE stickers</span>
+                <strong id="pholourieSticker5"></strong>
+            </div>
+
+            <div class="packaging-row" id="pholourieSticker10Row">
+                <span>X10 PHOLOURIE stickers</span>
+                <strong id="pholourieSticker10"></strong>
+            </div>
+
+            <div class="packaging-row" id="pholourieLogoRow">
+                <span>Pholourie-bag logo stickers</span>
+                <strong id="pholourieLogo"></strong>
+            </div>
+
+        </div>
+
+
+        <!-- FILLED ROTI PACKAGING -->
+
+        <div class="packaging-box" id="filledRotiPackagingBox">
+
+            <div class="packaging-box-title">FILLED ROTI BAGS</div>
+
+            <div class="packaging-row">
+                <span>Filled roti bags required (1 roti per bag)</span>
+                <strong id="filledRotiBags"></strong>
+            </div>
+
+            <div class="packaging-row">
+                <span>Roti-sized foil wraps</span>
+                <strong id="rotiFoils"></strong>
+            </div>
+
+            <div class="packaging-row">
+                <span>Filled-roti bag logo stickers</span>
+                <strong id="filledRotiLogo"></strong>
+            </div>
+
+            <div class="packaging-row" id="goatContainerRow">
+                <span>Small foil containers for goat meat</span>
+                <strong id="goatContainers"></strong>
+            </div>
+
+        </div>
+
+
+        <!-- CARRIER BAGS -->
+
+        <div
+            class="packaging-box"
+            id="carrierPackagingBox"
+        >
+
+
+            <div class="packaging-box-title">
+                COMBINED CARRIER BAGS
+            </div>
+
+
+            <div class="packaging-row">
+
+                <span>
+                    Food bags per carrier bag (doubles, pholourie or filled roti)
+                </span>
+
+                <strong>
+                    4
+                </strong>
+
+            </div>
+
+
+            <div
+                class="packaging-row"
+                id="carrierBagsRow"
+            >
+
+                <span>
+                    Carrier bags required
+                </span>
+
+                <strong id="carrierBags"></strong>
+
+            </div>
+
+
+            <div
+                class="packaging-row"
+                id="carrierLogoRow"
+            >
+
+                <span>
+                    Carrier-bag logo stickers
+                </span>
+
+                <strong id="carrierLogo"></strong>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <button
+        class="print-button"
+        onclick="printKitchenTicket()"
+    >
+
+        🖨 PRINT KITCHEN TICKET
+
+    </button>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     CUSTOMER RECEIPT
+     ===================================================== -->
+
+<div
+    class="customer-receipt-area"
+    id="customerReceiptArea"
+>
+
+
+    <div
+        class="customer-receipt"
+        id="customerReceipt"
+    >
+
+
+        <!-- RECEIPT HEADER -->
+
+        <div class="receipt-header">
+
+
+            <div class="receipt-business">
+                McARTHUR'S
+            </div>
+
+
+            <div class="receipt-business">
+                TRINIDAD DOUBLES
+            </div>
+
+
+            <div class="receipt-address">
+
+                23 Millthorpe Road<br>
+
+                RH12 4ER<br>
+
+                United Kingdom
+
+            </div>
+
+
+        </div>
+
+
+        <!-- CUSTOMER + ORDER -->
+
+        <div class="receipt-customer">
+
+
+            <div class="receipt-customer-label">
+                CUSTOMER
+            </div>
+
+
+            <!-- BLACK ORDER BOX -->
+
+            <div class="receipt-order-box">
+
+
+                <div class="receipt-order-label">
+                    ORDER #
+                </div>
+
+
+                <div
+                    id="receiptOrderNumber"
+                    class="receipt-order-number"
+                >
+                    ---
+                </div>
+
+
+            </div>
+
+
+            <!-- CUSTOMER NAME UNDER ORDER NUMBER -->
+
+            <div
+                id="receiptCustomerName"
+                class="receipt-customer-name"
+            >
+                CUSTOMER
+            </div>
+
+
+        </div>
+
+
+        <div class="receipt-line"></div>
+
+
+        <!-- RECEIPT INFORMATION -->
+
+        <div class="receipt-information">
+
+
+            <div>
+
+                Receipt Date:
+
+                <span id="receiptDate">
+                    ---
+                </span>
+
+            </div>
+
+
+            <div>
+
+                Receipt no.:
+
+                <span id="receiptNumber">
+                    ---
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="receipt-line"></div>
+
+
+        <!-- ITEMS -->
+
+        <div
+            id="receiptItems"
+            class="receipt-items"
+        ></div>
+
+
+        <div class="receipt-line"></div>
+
+
+        <!-- TOTALS -->
+
+        <div class="receipt-total-row">
+
+            <span>
+                Subtotal
+            </span>
+
+            <strong id="receiptSubtotal">
+                £0.00
+            </strong>
+
+        </div>
+
+
+        <div class="receipt-total-row">
+
+            <span>
+                Total
+            </span>
+
+            <strong id="receiptTotal">
+                £0.00
+            </strong>
+
+        </div>
+
+
+        <!-- PAYMENT -->
+
+        <div class="receipt-payment">
+
+
+            <div class="receipt-payment-title">
+                PAYMENT
+            </div>
+
+
+            <div
+                id="receiptPaymentMethod"
+                class="receipt-payment-main"
+            >
+                ---
+            </div>
+
+
+            <div
+                id="receiptWallet"
+                class="receipt-payment-wallet"
+            ></div>
+
+
+            <div
+                id="receiptCustomerPresent"
+                class="receipt-customer-present"
+            ></div>
+
+
+        </div>
+
+
+        <!-- VAT -->
+
+        <div class="receipt-vat">
+
+
+            <div class="receipt-vat-title">
+                VAT
+            </div>
+
+
+            <div class="receipt-vat-row">
+
+                <span>
+                    Rate
+                </span>
+
+                <span id="receiptVatRate">
+                    0%
+                </span>
+
+            </div>
+
+
+            <div class="receipt-vat-row">
+
+                <span>
+                    Net
+                </span>
+
+                <span id="receiptVatNet">
+                    £0.00
+                </span>
+
+            </div>
+
+
+            <div class="receipt-vat-row">
+
+                <span>
+                    VAT
+                </span>
+
+                <span id="receiptVatAmount">
+                    £0.00
+                </span>
+
+            </div>
+
+
+            <div class="receipt-vat-row">
+
+                <span>
+                    Gross
+                </span>
+
+                <span id="receiptVatGross">
+                    £0.00
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- THANK YOU -->
+
+        <div class="receipt-thank-you">
+
+            Thank you for your order!
+
+        </div>
+
+
+    </div>
+
+
+    <button
+        class="print-receipt-button"
+        onclick="printCustomerReceipt()"
+    >
+
+        🖨 PRINT / SAVE CUSTOMER RECEIPT
+
+    </button>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   PDF.JS SETUP
+   ===================================================== */
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+/*
+ * We only retain whether the receipt
+ * has successfully been loaded.
+ *
+ * The extracted PDF text itself is not
+ * stored globally.
+ */
+
+let receiptLoaded = false;
+
+
+
+/* =====================================================
+   HELPER FUNCTIONS
+   ===================================================== */
+
+function getQuantity(id) {
+
+    return Number(
+
+        document
+            .getElementById(id)
+            .value
+
+    ) || 0;
+
+}
+
+
+function setTicketValue(id, value) {
+
+    document
+        .getElementById(id)
+        .textContent = value;
+
+}
+
+
+function showTicketRow(rowId, quantity) {
+
+    document
+        .getElementById(rowId)
+        .style.display =
+
+        quantity > 0
+            ? "flex"
+            : "none";
+
+}
+
+
+
+/* =====================================================
+   RECEIPT FILE SELECTED
+   ===================================================== */
+
+function receiptFileSelected() {
+
+    const fileInput =
+        document.getElementById(
+            "receiptPdf"
+        );
+
+
+    const file =
+        fileInput.files[0];
+
+
+    const status =
+        document.getElementById(
+            "receiptStatus"
+        );
+
+
+    const button =
+        document.getElementById(
+            "loadReceiptButton"
+        );
+
+
+    receiptLoaded = false;
+
+
+    if (!file) {
+
+        status.textContent =
+            "No receipt PDF uploaded.";
+
+        button.disabled = true;
+
+        return;
+
+    }
+
+
+    if (
+        file.type !== "application/pdf"
+    ) {
+
+        status.textContent =
+            "Please select a PDF file.";
+
+        button.disabled = true;
+
+        fileInput.value = "";
+
+        return;
+
+    }
+
+
+    status.textContent =
+        "PDF selected: "
+        + file.name;
+
+
+    button.disabled = false;
+
+}
+
+
+
+/* =====================================================
+   LOAD PAYMENT RECEIPT PDF
+   ===================================================== */
+
+async function loadReceiptPDF() {
+
+    const fileInput =
+        document.getElementById(
+            "receiptPdf"
+        );
+
+
+    const file =
+        fileInput.files[0];
+
+
+    const status =
+        document.getElementById(
+            "receiptStatus"
+        );
+
+
+    const button =
+        document.getElementById(
+            "loadReceiptButton"
+        );
+
+
+    if (!file) {
+
+        status.textContent =
+            "Please choose a PDF receipt first.";
+
+        return;
+
+    }
+
+
+    status.textContent =
+        "Reading receipt PDF...";
+
+
+    button.disabled = true;
+
+
+    try {
+
+
+        const arrayBuffer =
+            await file.arrayBuffer();
+
+
+        const pdf =
+            await pdfjsLib
+                .getDocument({
+                    data: arrayBuffer
+                })
+                .promise;
+
+
+        let fullText = "";
+
+
+        for (
+            let pageNumber = 1;
+            pageNumber <= pdf.numPages;
+            pageNumber++
+        ) {
+
+
+            const page =
+                await pdf.getPage(
+                    pageNumber
+                );
+
+
+            const content =
+                await page.getTextContent();
+
+
+            const pageText =
+                content.items
+
+                    .map(
+                        item => item.str
+                    )
+
+                    .join(" ");
+
+
+            fullText +=
+                pageText
+                + "\n";
+
+        }
+
+
+        /*
+         * The PDF text is only held temporarily
+         * while it is parsed.
+         */
+
+        parseReceipt(
+            fullText
+        );
+
+
+        receiptLoaded = true;
+
+
+        status.textContent =
+            "Receipt loaded successfully ✓";
+
+
+    }
+
+    catch (error) {
+
+
+        console.error(
+            "Receipt PDF could not be read."
+        );
+
+
+        receiptLoaded = false;
+
+
+        status.textContent =
+            "Could not read this PDF. Please check that it is a normal text-based receipt PDF.";
+
+    }
+
+
+    button.disabled = false;
+
+}
+
+
+
+/* =====================================================
+   PARSE RECEIPT
+   ===================================================== */
+
+function parseReceipt(text) {
+
+
+    /* =================================================
+       CUSTOMER
+       ================================================= */
+
+    const customer =
+        document
+            .getElementById(
+                "customer"
+            )
+            .value
+            .trim();
+
+
+    document
+        .getElementById(
+            "receiptCustomerName"
+        )
+        .textContent =
+        customer || "CUSTOMER";
+
+
+
+    /* =================================================
+       ORDER NUMBER
+       ================================================= */
+
+    const orderNumber =
+        document
+            .getElementById(
+                "orderNumber"
+            )
+            .value
+            .trim();
+
+
+    document
+        .getElementById(
+            "receiptOrderNumber"
+        )
+        .textContent =
+        orderNumber || "---";
+
+
+
+    /* =================================================
+       RECEIPT DATE + TIME
+       ================================================= */
+
+    const dateMatch =
+        text.match(
+
+            /(?:Receipt\s+)?Date:\s*([0-9]{2}-[0-9]{2}-[0-9]{4}\s+[0-9]{1,2}:[0-9]{2}(?:\s+[A-Z]{2,5})?)/i
+
+        );
+
+
+    if (dateMatch) {
+
+        document
+            .getElementById(
+                "receiptDate"
+            )
+            .textContent =
+            dateMatch[1].trim();
+
+    }
+
+
+
+    /* =================================================
+       RECEIPT NUMBER
+       ================================================= */
+
+    const receiptNumberMatch =
+        text.match(
+
+            /Receipt\s+no\.?:\s*([A-Z0-9-]+)/i
+
+        );
+
+
+    if (receiptNumberMatch) {
+
+        document
+            .getElementById(
+                "receiptNumber"
+            )
+            .textContent =
+            receiptNumberMatch[1].trim();
+
+    }
+
+
+
+    /* =================================================
+       SUBTOTAL
+       ================================================= */
+
+    const subtotalMatch =
+        text.match(
+
+            /Subtotal\s*£\s*([0-9,.]+)/i
+
+        );
+
+
+    if (subtotalMatch) {
+
+        document
+            .getElementById(
+                "receiptSubtotal"
+            )
+            .textContent =
+            "£"
+            + subtotalMatch[1];
+
+    }
+
+
+
+    /* =================================================
+       TOTAL
+       ================================================= */
+
+    const totalMatch =
+        text.match(
+
+            /Total\s*£\s*([0-9,.]+)/i
+
+        );
+
+
+    if (totalMatch) {
+
+        document
+            .getElementById(
+                "receiptTotal"
+            )
+            .textContent =
+            "£"
+            + totalMatch[1];
+
+    }
+
+
+
+    /* =================================================
+       PAYMENT METHOD
+       ================================================= */
+
+    const paymentElement =
+        document.getElementById(
+            "receiptPaymentMethod"
+        );
+
+
+    paymentElement.textContent = "";
+
+
+    let paymentType = "";
+
+
+    if (
+        /Apple\s+Pay/i.test(text)
+    ) {
+
+        paymentType =
+            "APPLE PAY";
+
+    }
+
+    else if (
+        /Google\s+Pay/i.test(text)
+    ) {
+
+        paymentType =
+            "GOOGLE PAY";
+
+    }
+
+
+
+    const paymentLineMatch =
+        text.match(
+
+            /(?:Mastercard|Visa|Cash|American Express|Amex|Apple\s+Pay|Google\s+Pay)\s+£\s*([0-9,.]+)/i
+
+        );
+
+
+    let paymentAmount = "";
+
+
+    if (paymentLineMatch) {
+
+        paymentAmount =
+            paymentLineMatch[1];
+
+    }
+
+
+    else if (
+        paymentType &&
+        totalMatch
+    ) {
+
+        paymentAmount =
+            totalMatch[1];
+
+    }
+
+
+
+    if (
+        !paymentType
+    ) {
+
+        const normalPaymentMatch =
+            text.match(
+
+                /(?:^|\s)(Mastercard|Visa|Cash|American Express|Amex)\s+£\s*([0-9,.]+)/i
+
+            );
+
+
+        if (
+            normalPaymentMatch
+        ) {
+
+            paymentType =
+                normalPaymentMatch[1]
+                    .toUpperCase();
+
+
+            paymentAmount =
+                normalPaymentMatch[2];
+
+        }
+
+    }
+
+
+
+    if (
+        paymentType
+    ) {
+
+        paymentElement.textContent =
+
+            paymentType
+
+            + (
+                paymentAmount
+                    ? " £" + paymentAmount
+                    : ""
+            );
+
+    }
+
+
+
+    /* =================================================
+       CUSTOMER NOT PRESENT
+       ================================================= */
+
+    const customerPresentElement =
+        document.getElementById(
+            "receiptCustomerPresent"
+        );
+
+
+    customerPresentElement.textContent =
+        "";
+
+
+    if (
+        /Customer\s+not\s+present/i.test(text)
+    ) {
+
+        customerPresentElement.textContent =
+            "Customer not present";
+
+    }
+
+
+
+    /* =================================================
+       VAT
+       ================================================= */
+
+    const vatMatch =
+        text.match(
+
+            /A\s*(\d+(?:\.\d+)?)%\s*£\s*([0-9,.]+)\s*£\s*([0-9,.]+)\s*£\s*([0-9,.]+)/i
+
+        );
+
+
+    if (vatMatch) {
+
+
+        document
+            .getElementById(
+                "receiptVatRate"
+            )
+            .textContent =
+            vatMatch[1]
+            + "%";
+
+
+        document
+            .getElementById(
+                "receiptVatNet"
+            )
+            .textContent =
+            "£"
+            + vatMatch[2];
+
+
+        document
+            .getElementById(
+                "receiptVatAmount"
+            )
+            .textContent =
+            "£"
+            + vatMatch[3];
+
+
+        document
+            .getElementById(
+                "receiptVatGross"
+            )
+            .textContent =
+            "£"
+            + vatMatch[4];
+
+    }
+
+
+
+    /* =================================================
+       ITEMS
+       ================================================= */
+
+    parseReceiptItems(
+        text
+    );
+
+
+
+    /* =================================================
+       SHOW RECEIPT
+       ================================================= */
+
+    const receiptArea =
+        document.getElementById(
+            "customerReceiptArea"
+        );
+
+
+    receiptArea.style.display =
+        "block";
+
+
+    receiptArea.scrollIntoView({
+
+        behavior:
+            "smooth"
+
+    });
+
+}
+
+
+
+/* =====================================================
+   ITEM PARSER
+   ===================================================== */
+
+function parseReceiptItems(text) {
+
+
+    const container =
+        document.getElementById(
+            "receiptItems"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const itemPattern =
+
+        /(\d+)\s*x\s+(.+?)\s+£\s*([0-9,.]+)\s+A(?=\s|$)/gi;
+
+
+    let match;
+
+
+    while (
+
+        (match =
+            itemPattern.exec(text))
+
+        !== null
+
+    ) {
+
+
+        const quantity =
+            match[1];
+
+
+        const itemName =
+            match[2]
+                .trim();
+
+
+        const amount =
+            match[3];
+
+
+        if (
+
+            /^(subtotal|total|vat|net|gross)$/i.test(
+                itemName
+            )
+
+        ) {
+
+            continue;
+
+        }
+
+
+        const row =
+            document.createElement(
+                "div"
+            );
+
+
+        row.className =
+            "receipt-item";
+
+
+        const name =
+            document.createElement(
+                "span"
+            );
+
+
+        name.className =
+            "receipt-item-name";
+
+
+        name.textContent =
+
+            quantity
+            + "x "
+            + itemName;
+
+
+        const price =
+            document.createElement(
+                "span"
+            );
+
+
+        price.className =
+            "receipt-item-amount";
+
+
+        price.textContent =
+            "£"
+            + amount;
+
+
+        row.appendChild(
+            name
+        );
+
+
+        row.appendChild(
+            price
+        );
+
+
+        container.appendChild(
+            row
+        );
+
+    }
+
+
+    if (
+        container.children.length === 0
+    ) {
+
+
+        const row =
+            document.createElement(
+                "div"
+            );
+
+
+        row.className =
+            "receipt-item";
+
+
+        row.textContent =
+            "No items could be read from the PDF.";
+
+
+        container.appendChild(
+            row
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   GENERATE KITCHEN TICKET
+   ===================================================== */
+
+function generateTicket() {
+
+
+    const customer =
+        document
+            .getElementById(
+                "customer"
+            )
+            .value
+            .trim();
+
+
+    const orderNumber =
+        document
+            .getElementById(
+                "orderNumber"
+            )
+            .value
+            .trim();
+
+
+    const time =
+        document
+            .getElementById(
+                "collectionTime"
+            )
+            .value;
+
+
+    const roti1 =
+        getQuantity(
+            "roti1"
+        );
+
+
+    const curries =
+        getQuantity(
+            "curries"
+        );
+
+
+    const doubles1 =
+        getQuantity(
+            "doubles1"
+        );
+
+
+    const doubles2 =
+        getQuantity(
+            "doubles2"
+        );
+
+
+    const doubles3 =
+        getQuantity(
+            "doubles3"
+        );
+
+
+    const doubles4 =
+        getQuantity(
+            "doubles4"
+        );
+
+
+    const doubles5 =
+        getQuantity(
+            "doubles5"
+        );
+
+
+    const doubles6 =
+        getQuantity(
+            "doubles6"
+        );
+
+
+    const fryBake =
+        getQuantity(
+            "fryBake"
+        );
+
+
+    const pholourie =
+        getQuantity(
+            "pholourie"
+        );
+
+
+    const potDal =
+        getQuantity(
+            "potDal"
+        );
+
+
+    const rotiChicken =
+        getQuantity(
+            "rotiChicken"
+        );
+
+
+    const rotiLambBeef =
+        getQuantity(
+            "rotiLambBeef"
+        );
+
+
+    const rotiGoat =
+        getQuantity(
+            "rotiGoat"
+        );
+
+
+    const rotiPotato =
+        getQuantity(
+            "rotiPotato"
+        );
+
+
+    const specialDalGoat =
+        getQuantity(
+            "specialDalGoat"
+        );
+
+
+    const vegetableCurry =
+        getQuantity(
+            "vegetableCurry"
+        );
+
+
+    const totalDoubles =
+
+        (doubles1 * 1)
+
+        + (doubles2 * 2)
+
+        + (doubles3 * 3)
+
+        + (doubles4 * 4)
+
+        + (doubles5 * 5)
+
+        + (doubles6 * 6);
+
+
+    const bagsRequired =
+
+        totalDoubles === 0
+
+            ? 0
+
+            : Math.ceil(
+                totalDoubles / 3
+            );
+
+
+    let sticker1 = 0;
+
+    let sticker2 = 0;
+
+    let sticker3 = 0;
+
+
+    if (
+        bagsRequired > 0
+    ) {
+
+
+        const base =
+
+            Math.floor(
+                totalDoubles /
+                bagsRequired
+            );
+
+
+        const remainder =
+
+            totalDoubles %
+            bagsRequired;
+
+
+        if (
+            base === 3
+        ) {
+
+            sticker3 =
+                bagsRequired;
+
+        }
+
+
+        else if (
+            base === 2
+        ) {
+
+            sticker3 =
+                remainder;
+
+
+            sticker2 =
+
+                bagsRequired
+                - remainder;
+
+        }
+
+
+        else if (
+            base === 1
+        ) {
+
+            sticker2 =
+                remainder;
+
+
+            sticker1 =
+
+                bagsRequired
+                - remainder;
+
+        }
+
+
+        else {
+
+            sticker1 =
+                bagsRequired;
+
+        }
+
+    }
+
+
+    const doublesBagLogoStickers =
+        bagsRequired;
+
+
+    // Pholourie is entered as menu portions of 5 pieces each.
+    // Each bag holds up to 10 pieces and gets either an X5 or X10 sticker.
+    const pholouriePieces = pholourie * 5;
+    const pholourieBags = Math.ceil(pholouriePieces / 10);
+    const pholourieSticker5 = pholouriePieces % 10 === 5 ? 1 : 0;
+    const pholourieSticker10 = Math.floor(pholouriePieces / 10);
+    const pholourieLogoStickers = pholourieBags;
+
+
+    // Every filled roti is wrapped in one roti-sized foil and put in its own bag.
+    const filledRotiBags = rotiChicken + rotiLambBeef + rotiGoat + rotiPotato;
+    const rotiFoils = filledRotiBags;
+    const filledRotiLogoStickers = filledRotiBags;
+    const goatContainers = rotiGoat;
+
+
+    // One doubles bag (up to 3 doubles), one pholourie bag, or one filled-roti bag
+    // each occupies one carrier-bag slot. Four slots fit in one carrier bag.
+    const totalFoodBagsForCarriers = bagsRequired + pholourieBags + filledRotiBags;
+    const carrierBags = totalFoodBagsForCarriers === 0
+        ? 0
+        : Math.ceil(totalFoodBagsForCarriers / 4);
+    const carrierLogoStickers = carrierBags;
+
+
+    setTicketValue(
+        "ticketOrder",
+        orderNumber || "---"
+    );
+
+
+    setTicketValue(
+        "ticketCustomer",
+        customer || "CUSTOMER"
+    );
+
+
+    setTicketValue(
+        "ticketTime",
+        time || "---"
+    );
+
+
+    setTicketValue(
+        "ticketRoti1",
+        roti1
+    );
+
+
+    setTicketValue(
+        "ticketCurries",
+        curries
+    );
+
+
+    setTicketValue(
+        "ticketDoubles1",
+        doubles1
+    );
+
+
+    setTicketValue(
+        "ticketDoubles2",
+        doubles2
+    );
+
+
+    setTicketValue(
+        "ticketDoubles3",
+        doubles3
+    );
+
+
+    setTicketValue(
+        "ticketDoubles4",
+        doubles4
+    );
+
+
+    setTicketValue(
+        "ticketDoubles5",
+        doubles5
+    );
+
+
+    setTicketValue(
+        "ticketDoubles6",
+        doubles6
+    );
+
+
+    setTicketValue(
+        "ticketFryBake",
+        fryBake
+    );
+
+
+    setTicketValue(
+        "ticketPholourie",
+        pholourie
+    );
+
+
+    setTicketValue(
+        "ticketPotDal",
+        potDal
+    );
+
+
+    setTicketValue(
+        "ticketRotiChicken",
+        rotiChicken
+    );
+
+
+    setTicketValue(
+        "ticketRotiLambBeef",
+        rotiLambBeef
+    );
+
+
+    setTicketValue(
+        "ticketRotiGoat",
+        rotiGoat
+    );
+
+
+    setTicketValue(
+        "ticketRotiPotato",
+        rotiPotato
+    );
+
+
+    setTicketValue(
+        "ticketSpecialDalGoat",
+        specialDalGoat
+    );
+
+
+    setTicketValue(
+        "ticketVegetableCurry",
+        vegetableCurry
+    );
+
+
+    showTicketRow(
+        "ticketRoti1Row",
+        roti1
+    );
+
+
+    showTicketRow(
+        "ticketCurriesRow",
+        curries
+    );
+
+
+    showTicketRow(
+        "ticketDoubles1Row",
+        doubles1
+    );
+
+
+    showTicketRow(
+        "ticketDoubles2Row",
+        doubles2
+    );
+
+
+    showTicketRow(
+        "ticketDoubles3Row",
+        doubles3
+    );
+
+
+    showTicketRow(
+        "ticketDoubles4Row",
+        doubles4
+    );
+
+
+    showTicketRow(
+        "ticketDoubles5Row",
+        doubles5
+    );
+
+
+    showTicketRow(
+        "ticketDoubles6Row",
+        doubles6
+    );
+
+
+    showTicketRow(
+        "ticketFryBakeRow",
+        fryBake
+    );
+
+
+    showTicketRow(
+        "ticketPholourieRow",
+        pholourie
+    );
+
+
+    showTicketRow(
+        "ticketPotDalRow",
+        potDal
+    );
+
+
+    showTicketRow(
+        "ticketRotiChickenRow",
+        rotiChicken
+    );
+
+
+    showTicketRow(
+        "ticketRotiLambBeefRow",
+        rotiLambBeef
+    );
+
+
+    showTicketRow(
+        "ticketRotiGoatRow",
+        rotiGoat
+    );
+
+
+    showTicketRow(
+        "ticketRotiPotatoRow",
+        rotiPotato
+    );
+
+
+    showTicketRow(
+        "ticketSpecialDalGoatRow",
+        specialDalGoat
+    );
+
+
+    showTicketRow(
+        "ticketVegetableCurryRow",
+        vegetableCurry
+    );
+
+
+    setTicketValue(
+        "bagsRequired",
+        bagsRequired
+    );
+
+
+    setTicketValue(
+        "sticker1",
+        sticker1
+    );
+
+
+    setTicketValue(
+        "sticker2",
+        sticker2
+    );
+
+
+    setTicketValue(
+        "sticker3",
+        sticker3
+    );
+
+
+    setTicketValue(
+        "bagLogo",
+        doublesBagLogoStickers
+    );
+
+
+    setTicketValue("pholouriePieces", pholouriePieces);
+    setTicketValue("pholourieBags", pholourieBags);
+    setTicketValue("pholourieSticker5", pholourieSticker5);
+    setTicketValue("pholourieSticker10", pholourieSticker10);
+    setTicketValue("pholourieLogo", pholourieLogoStickers);
+
+    setTicketValue("filledRotiBags", filledRotiBags);
+    setTicketValue("rotiFoils", rotiFoils);
+    setTicketValue("filledRotiLogo", filledRotiLogoStickers);
+    setTicketValue("goatContainers", goatContainers);
+
+
+    setTicketValue(
+        "carrierBags",
+        carrierBags
+    );
+
+
+    setTicketValue(
+        "carrierLogo",
+        carrierLogoStickers
+    );
+
+
+    showTicketRow(
+        "sticker1Row",
+        sticker1
+    );
+
+
+    showTicketRow(
+        "sticker2Row",
+        sticker2
+    );
+
+
+    showTicketRow(
+        "sticker3Row",
+        sticker3
+    );
+
+
+    showTicketRow(
+        "bagLogoRow",
+        doublesBagLogoStickers
+    );
+
+
+    document
+        .getElementById(
+            "doublesPackagingBox"
+        )
+        .style.display =
+
+        totalDoubles > 0
+            ? "block"
+            : "none";
+
+
+    showTicketRow("pholourieSticker5Row", pholourieSticker5);
+    showTicketRow("pholourieSticker10Row", pholourieSticker10);
+    showTicketRow("pholourieLogoRow", pholourieLogoStickers);
+    showTicketRow("goatContainerRow", goatContainers);
+
+    document.getElementById("pholouriePackagingBox").style.display =
+        pholouriePieces > 0 ? "block" : "none";
+
+    document.getElementById("filledRotiPackagingBox").style.display =
+        filledRotiBags > 0 ? "block" : "none";
+
+
+    document
+        .getElementById(
+            "carrierPackagingBox"
+        )
+        .style.display =
+
+        totalFoodBagsForCarriers > 0
+            ? "block"
+            : "none";
+
+
+    document
+        .getElementById(
+            "packagingSeparator"
+        )
+        .style.display =
+
+        totalFoodBagsForCarriers > 0
+            ? "block"
+            : "none";
+
+
+    document
+        .getElementById(
+            "packagingTitle"
+        )
+        .style.display =
+
+        totalFoodBagsForCarriers > 0
+            ? "block"
+            : "none";
+
+
+    document
+        .getElementById(
+            "receiptCustomerName"
+        )
+        .textContent =
+        customer || "CUSTOMER";
+
+
+    document
+        .getElementById(
+            "receiptOrderNumber"
+        )
+        .textContent =
+        orderNumber || "---";
+
+
+    document
+        .getElementById(
+            "ticketArea"
+        )
+        .style.display =
+        "block";
+
+
+    document
+        .getElementById(
+            "ticketArea"
+        )
+        .scrollIntoView({
+
+            behavior:
+                "smooth"
+
+        });
+
+}
+
+
+
+/* =====================================================
+   PRINT KITCHEN TICKET
+   ===================================================== */
+
+function printKitchenTicket() {
+
+    const ticketArea =
+        document.getElementById(
+            "ticketArea"
+        );
+
+    ticketArea.classList.add(
+        "printing-ticket"
+    );
+
+    window.print();
+
+}
+
+
+
+/* =====================================================
+   PRINT CUSTOMER RECEIPT
+   ===================================================== */
+
+function printCustomerReceipt() {
+
+    const receiptArea =
+        document.getElementById(
+            "customerReceiptArea"
+        );
+
+
+    if (
+
+        receiptArea.style.display ===
+        "none"
+
+        ||
+
+        !receiptLoaded
+
+    ) {
+
+        alert(
+            "Please upload and load the payment receipt PDF first."
+        );
+
+        return;
+
+    }
+
+
+    receiptArea.classList.add(
+        "printing-receipt"
+    );
+
+
+    window.print();
+
+}
+
+
+
+/* =====================================================
+   AFTER PRINTING
+   ===================================================== */
+
+window.addEventListener(
+
+    "afterprint",
+
+    function() {
+
+
+        document
+            .getElementById(
+                "ticketArea"
+            )
+            .classList
+            .remove(
+                "printing-ticket"
+            );
+
+
+        document
+            .getElementById(
+                "customerReceiptArea"
+            )
+            .classList
+            .remove(
+                "printing-receipt"
+            );
+
+    }
+
+);
+
+
+
+/* =====================================================
+   RESET
+   ===================================================== */
+
+function resetOrder() {
+
+    const fields = [
+
+        "roti1",
+        "curries",
+
+        "doubles1",
+        "doubles2",
+        "doubles3",
+        "doubles4",
+        "doubles5",
+        "doubles6",
+
+        "fryBake",
+        "pholourie",
+        "potDal",
+        "rotiChicken",
+        "rotiLambBeef",
+        "rotiGoat",
+        "rotiPotato",
+        "specialDalGoat",
+        "vegetableCurry"
+
+    ];
+
+
+    fields.forEach(
+
+        function(id) {
+
+            document
+                .getElementById(id)
+                .value = "0";
+
+        }
+
+    );
+
+
+    document
+        .getElementById(
+            "customer"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "orderNumber"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "collectionTime"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "receiptPdf"
+        )
+        .value = "";
+
+
+    receiptLoaded = false;
+
+
+    document
+        .getElementById(
+            "receiptStatus"
+        )
+        .textContent =
+        "No receipt PDF uploaded.";
+
+
+    document
+        .getElementById(
+            "loadReceiptButton"
+        )
+        .disabled = true;
+
+
+    document
+        .getElementById(
+            "ticketArea"
+        )
+        .style.display =
+        "none";
+
+
+    document
+        .getElementById(
+            "customerReceiptArea"
+        )
+        .style.display =
+        "none";
+
+
+    document
+        .getElementById(
+            "receiptItems"
+        )
+        .innerHTML = "";
+
+
+    document
+        .getElementById(
+            "receiptCustomerName"
+        )
+        .textContent =
+        "CUSTOMER";
+
+
+    document
+        .getElementById(
+            "receiptOrderNumber"
+        )
+        .textContent =
+        "---";
+
+
+    document
+        .getElementById(
+            "receiptDate"
+        )
+        .textContent =
+        "---";
+
+
+    document
+        .getElementById(
+            "receiptNumber"
+        )
+        .textContent =
+        "---";
+
+
+    document
+        .getElementById(
+            "receiptSubtotal"
+        )
+        .textContent =
+        "£0.00";
+
+
+    document
+        .getElementById(
+            "receiptTotal"
+        )
+        .textContent =
+        "£0.00";
+
+
+    document
+        .getElementById(
+            "receiptPaymentMethod"
+        )
+        .textContent =
+        "---";
+
+
+    document
+        .getElementById(
+            "receiptWallet"
+        )
+        .textContent =
+        "";
+
+
+    document
+        .getElementById(
+            "receiptCustomerPresent"
+        )
+        .textContent =
+        "";
+
+
+    document
+        .getElementById(
+            "receiptVatRate"
+        )
+        .textContent =
+        "0%";
+
+
+    document
+        .getElementById(
+            "receiptVatNet"
+        )
+        .textContent =
+        "£0.00";
+
+
+    document
+        .getElementById(
+            "receiptVatAmount"
+        )
+        .textContent =
+        "£0.00";
+
+
+    document
+        .getElementById(
+            "receiptVatGross"
+        )
+        .textContent =
+        "£0.00";
+
+}
+
+</script>
+
+</body>
+</html>
